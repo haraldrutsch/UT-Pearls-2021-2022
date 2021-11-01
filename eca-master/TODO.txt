@@ -19,3 +19,5 @@
 [x] Docs in graph.js
 [x] emit() in non-server context should doe something useful
 [x] Rework rules set to non-global object
+
+HI HI HA HA
