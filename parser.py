@@ -7,3 +7,5 @@ file = urllib.request.urlopen(url)
 for line in file:
     tweetAux = json.loads(line)
     print(tweetAux['created_at'], "-", tweetAux['text'].encode('utf-8'), file=open('output.txt', 'a'))
+
+print('done')
