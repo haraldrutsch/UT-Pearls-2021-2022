@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7cfc42cf-7871-4a58-b838-ac5348286af5" name="Changes" comment="">
+    <list default="true" id="0c3547e8-ff29-4fd8-91fc-f7315d70424b" name="Changes" comment="Moving everything to main">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/parser.py" afterDir="false" />
     </list>
@@ -97,5 +97,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Moving everything to main" />
+    <option name="LAST_COMMIT_MESSAGE" value="Moving everything to main" />
   </component>
 </project>
