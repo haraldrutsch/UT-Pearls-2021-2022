@@ -29,14 +29,23 @@ def counter_for_graph(input_list, time_frame_unix):
     end_unix_time = start_unix_time + time_frame_unix
 
     unix_time_frames = []
-    baseball_totals = [0]
-    basketball_totals = [0]
-    volleyball_totals = [0]
-    tennis_totals = [0]
-    cricket_totals = [0]
-    soccer_totals = [0]
-    football_totals = [0]
-    rugby_totals = [0]
+    baseball_totals = []
+    basketball_totals = []
+    volleyball_totals = []
+    tennis_totals = []
+    cricket_totals = []
+    soccer_totals = []
+    football_totals = []
+    rugby_totals = []
+
+    baseball_num = 0
+    basketball_num = 0
+    volleyball_num = 0
+    tennis_num = 0
+    cricket_num = 0
+    soccer_num = 0
+    football_num = 0
+    rugby_num = 0
 
     unix_time_frames.append(end_unix_time)
     time_frame_index = 0
@@ -45,10 +54,42 @@ def counter_for_graph(input_list, time_frame_unix):
         if tweet[2] == []:
             continue
         elif tweet[0] <= unix_time_frames[time_frame_index]:
-            print()
+            for sport in tweet[2]:
+                if sport == "baseball":
+                    baseball_num += 1
+                elif sport == "basketball":
+                    basketball_num += 1
+                elif sport == "volleyball":
+                    volleyball_num += 1
+                elif sport == "tennis":
+                    tennis_num += 1
+                elif sport == "cricket":
+                    cricket_num += 1
+                elif sport == "soccer":
+                    soccer_num += 1
+                elif sport == "football":
+                    football_num += 1
+                elif sport == "rugby":
+                    rugby_num += 1
         else:
             unix_time_frames.append(unix_time_frames[time_frame_index] + time_frame_unix)
             time_frame_index += 1
+            baseball_totals.append(baseball_num)
+            baseball_num = 0
+            basketball_totals.append(basketball_num)
+            basketball_num = 0
+            volleyball_totals.append(volleyball_num)
+            volleyball_num = 0
+            tennis_totals.append(tennis_num)
+            tennis_num = 0
+            cricket_totals.append(cricket_num)
+            cricket_num = 0
+            soccer_totals.append(soccer_num)
+            soccer_num = 0
+            football_totals.append(football_num)
+            football_num = 0
+            rugby_totals.append(rugby_num)
+            rugby_num = 0
 
     all_totals = [unix_time_frames, baseball_totals, basketball_totals, volleyball_totals, tennis_totals, cricket_totals, soccer_totals, football_totals, rugby_totals]
     return all_totals
