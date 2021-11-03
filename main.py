@@ -6,7 +6,7 @@ filtered_data = 'output.txt'
 
 def main():
     print("")
-    print(tuple_maker(filtered_data))
+    print(list_maker(filtered_data))
 
 
 if __name__ == '__main__':
