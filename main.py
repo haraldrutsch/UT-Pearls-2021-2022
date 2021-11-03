@@ -1,9 +1,12 @@
 from filter_tweet import *
+from counter import *
+
+filtered_data = 'output.txt'
 
 
 def main():
-    # test call for filter
-    print(filter_by_sport("basketball ball -sports -football f-ootball rugby football"))
+    print("")
+    print(tuple_maker(filtered_data))
 
 
 if __name__ == '__main__':
