@@ -29,14 +29,14 @@ def counter_for_graph(input_list, time_frame_unix):
     end_unix_time = start_unix_time + time_frame_unix
 
     unix_time_frames = []
-    baseball_totals = []
-    basketball_totals = []
-    volleyball_totals = []
-    tennis_totals = []
-    cricket_totals = []
-    soccer_totals = []
-    football_totals = []
-    rugby_totals = []
+    baseball_totals = [0]
+    basketball_totals = [0]
+    volleyball_totals = [0]
+    tennis_totals = [0]
+    cricket_totals = [0]
+    soccer_totals = [0]
+    football_totals = [0]
+    rugby_totals = [0]
 
     unix_time_frames.append(end_unix_time)
     time_frame_index = 0
