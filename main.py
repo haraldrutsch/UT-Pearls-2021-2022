@@ -2,7 +2,8 @@ from filter_tweet import *
 
 
 def main():
-    print(filter_by_sport("basketball ball -sports -football f-ootball rugby"))
+    # test call for filter
+    print(filter_by_sport("basketball ball -sports -football f-ootball rugby football"))
 
 
 if __name__ == '__main__':
