@@ -1,17 +1,18 @@
+from filter_tweet import *
 
-p = 'output.txt'
-def tuplie_maker(p):
-    with open(p, encoding='utf8') as f:
-        all_lines = f.readlines()
-    K = ' - b'
+filtered_data = 'output.txt'
+
+
+def tuple_maker(input):
+    with open(input, encoding='utf8') as in_file:
+        all_lines = in_file.readlines()
+    split_by_chars = ' - b'
     results = []
     for line in all_lines:
-        parts = line.split(K)
+        parts = line.split(split_by_chars)
+        parts.append(filter_by_sport(parts[1]))
         results.append(parts)
-    #for item in results:
-    #    print(item)
-    p = []
+    input = []
     for item in results:
-        p.append(item)
-    return p
-print(tuplie_maker(p))
+        input.append(item)
+    return input
