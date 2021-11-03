@@ -24,4 +24,7 @@ def list_maker(input):
 def convert_time_date_to_unix_millis(input):
     # Assuming date time comes in form -> Sun Nov 17 04:38:18 +0000 2019
     split_input = re.split(" ", input)
-    date_time = [split_input[1], split_input[2], split_input[3], split_input[5]]
+    date_time_filtered = [split_input[1], split_input[2], split_input[3], split_input[5]]
+
+# datetime.datetime.fromtimestamp(ms/1000.0)
+# to convert back into date time
