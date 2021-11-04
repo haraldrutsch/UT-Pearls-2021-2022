@@ -15,16 +15,16 @@ new_data = []
 # Main is going to be our Program.
 url = "https://bronto.ewi.utwente.nl/ecadata/sports-20191117.txt"
 time_interval = 10*60 #in seconds
-total_time = 3*60*60
+total_time = 1*60*60+20*60
 i = 0
 
-for i in range(8):
-    new_data = parserUT.parser(url, time_interval, i)
+for i in range(int(total_time/time_interval)):
+    new_data = parserUT.parser(url, time_interval,i)
 
-    temp = counter.counter_for_graph(new_data, time_interval-1)
-    # -1 because some one fucked up on the backend
+    temp = counter.counter_for_graph(new_data,time_interval-1)# -1 because some one fucked up on the backend
+#print(temp)
 
-    time.append(temp[0][0])
+    time.append( counter.convert_unix_to_time_date(temp[0][0]))
     baseball.append(temp[1][0] / (time_interval / 60))
     basketball.append(temp[2][0] / (time_interval / 60))
     volleyball.append(temp[3][0] / (time_interval / 60))
@@ -35,8 +35,7 @@ for i in range(8):
     rugby.append(temp[8][0] / (time_interval / 60))
 
 
-print(rugby)
-
+print(time,baseball,basketball,volleyball,tennis,cricket,soccer,football,rugby)
 
 def start_time(local_url):
     json_file = urllib.request.urlopen(local_url)
