@@ -18,7 +18,7 @@ def parser(url, time_frame, time_frame_index):
     tweet_parse_time = first_tweet_time + (time_frame * time_frame_index)
 
     # DEBUG CODE - REMOVE LATER
-    # print("First tweet unix: " + str(first_tweet_time) + " | Calculated tweet start time: " + str(tweet_parse_time))
+    # print("First tweet unix: " + str(convert_unix_to_time_date(first_tweet_time)) + " | Calculated tweet start time: " + str(convert_unix_to_time_date(tweet_parse_time)))
     # DEBUG CODE - REMOVE LATER
 
     # Calls parser_stage_two for further processing
