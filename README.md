@@ -8,3 +8,7 @@ Project for UT-Pearls Week 9 2021-2022.
 - _Aarav Mehrishi_ (2477521)
 - _Harald Rutsch_ (2839296)
 - _Martí Checa Hernàndez_ (2656213)
+
+**Libraries**
+- <a href="https://github.com/plotly/plotly.py" target="_blank">Plotly 3.5.1</a>
+- <a href="https://dash.plotly.com/" target="_blank">Dash 2.0.0</a>
