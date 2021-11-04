@@ -2,13 +2,11 @@ from filter_tweet import *
 import re
 import datetime
 
-filtered_data = 'output.txt'
-sample_time_date_start = "Sat Nov 16 13:52:20 +0000 2019"
-sample_time_date_end = "Sun Nov 17 04:38:18 +0000 2019"
-
-
+# Counts the number of tweets for all kind of sports
 def counter_for_graph(input_list, time_frame_unix):
+    # Gets te unix time of the first tweet in the input list
     start_unix_time = input_list[0][0]
+    # End of the timeframe
     end_unix_time = start_unix_time + time_frame_unix
 
     unix_time_frames = []
@@ -30,13 +28,17 @@ def counter_for_graph(input_list, time_frame_unix):
     football_num = 0
     rugby_num = 0
 
+    # Adds end of timeframe to list
     unix_time_frames.append(end_unix_time)
     time_frame_index = 0
 
+    # Looks at if a sport is mentioned in a tweet
     for tweet in input_list:
         if tweet[1] == []:
             continue
+        # Looks whether the tweet is in the timeframe
         elif tweet[0] <= unix_time_frames[time_frame_index]:
+            # Checks for every sport
             for sport in tweet[1]:
                 if sport == "baseball":
                     baseball_num += 1
@@ -55,6 +57,7 @@ def counter_for_graph(input_list, time_frame_unix):
                 elif sport == "rugby":
                     rugby_num += 1
         else:
+            # Adds everything to their lists and resets the variables
             unix_time_frames.append(unix_time_frames[time_frame_index] + time_frame_unix)
             time_frame_index += 1
             baseball_totals.append(baseball_num)
@@ -74,6 +77,7 @@ def counter_for_graph(input_list, time_frame_unix):
             rugby_totals.append(rugby_num)
             rugby_num = 0
 
+    # Adds all the lists to one list
     all_totals = [unix_time_frames, baseball_totals, basketball_totals, volleyball_totals, tennis_totals, cricket_totals, soccer_totals, football_totals, rugby_totals]
     return all_totals
 
