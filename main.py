@@ -19,7 +19,7 @@ total_time = 3*60*60
 i = 0
 
 for i in range(8):
-    new_data = parserUT.parser(url, time_interval)
+    new_data = parserUT.parser(url, time_interval,i)
 
     temp = counter.counter_for_graph(new_data,time_interval-1)# -1 because some one fucked up on the backend
 #print(temp)
