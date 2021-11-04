@@ -19,10 +19,10 @@ total_time = 3*60*60
 i = 0
 
 for i in range(8):
-    new_data = parserUT.parser(url, time_interval,i)
+    new_data = parserUT.parser(url, time_interval, 0)
 
-    temp = counter.counter_for_graph(new_data,time_interval-1)# -1 because some one fucked up on the backend
-#print(temp)
+    temp = counter.counter_for_graph(new_data, time_interval-1)
+    # -1 because some one fucked up on the backend
 
     time.append(temp[0][0])
     baseball.append(temp[1][0] / (time_interval / 60))
@@ -36,6 +36,7 @@ for i in range(8):
 
 
 print(rugby)
+
 
 def start_time(local_url):
     json_file = urllib.request.urlopen(local_url)
