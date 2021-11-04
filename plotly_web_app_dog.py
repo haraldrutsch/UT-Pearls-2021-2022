@@ -70,6 +70,7 @@ app.layout = html.Div([
                     n_intervals=0
                 ),
             ], className="seven columns"),
+            '''
             html.Div([
                 html.H3(
                     children='Popularity',
@@ -92,6 +93,7 @@ app.layout = html.Div([
                     n_intervals=0
                 ),
             ], className="seven columns"),
+            '''
         ], className="container")
 ])
 
@@ -124,11 +126,11 @@ def update_graph_live(n):
     line_chart_data['rugby'].append(temp[8][0])
 
     # Create the graph with subplots
-    fig = plotly.tools.make_subplots(rows=1, cols=1, vertical_spacing=0.2)
-    fig['layout']['margin'] = {
-        'l': 30, 'r': 10, 'b': 30, 't': 10
-    }
-    fig['layout']['legend'] = {'x': 0, 'y': 1, 'xanchor': 'left'}
+    #fig = plotly.tools.make_subplots(rows=1, cols=1, vertical_spacing=0.2)
+    #fig['layout']['margin'] = {
+    #    'l': 30, 'r': 10, 'b': 30, 't': 10
+    #}
+    #fig['layout']['legend'] = {'x': 0, 'y': 1, 'xanchor': 'left'}
 
     for n in range(1, 8):
         fig.append_trace(go.Scatter(x=line_chart_data['time'][last_time_frame_index],
@@ -136,6 +138,37 @@ def update_graph_live(n):
                                     mode='lines',
                                     line=dict(color=colors[n], width=line_size[n]),
                                     connectgaps=True))
+
+    fig.update_layout(
+        xaxis=dict(
+            showline=True,
+            showgrid=False,
+            showticklabels=True,
+            linecolor='rgb(204, 204, 204)',
+            linewidth=2,
+            ticks='outside',
+            tickfont=dict(
+                family='Arial',
+                size=12,
+                color='rgb(82, 82, 82)',
+            ),
+        ),
+        yaxis=dict(
+            showgrid=False,
+            zeroline=False,
+            showline=True,
+            showticklabels=True,
+            linecolor='rgb(204, 204, 204)',
+            linewidth=2,
+            ticks='outside',
+            tickfont=dict(
+                family='Arial',
+                size=12,
+                color='rgb(82, 82, 82)', )
+
+        ), )
+
+    fig.update_layout(annotations=annotations)
 
     return fig
 
