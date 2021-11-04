@@ -77,7 +77,7 @@ def counter_for_graph(input_list, time_frame_unix):
             rugby_totals.append(rugby_num)
             rugby_num = 0
 
-    # Adds all the lists to one list
+    # Combines all the lists into one list
     all_totals = [unix_time_frames, baseball_totals, basketball_totals, volleyball_totals, tennis_totals, cricket_totals, soccer_totals, football_totals, rugby_totals]
     return all_totals
 
@@ -99,7 +99,7 @@ def convert_unix_to_time_date(input):
     # datetime.datetime.fromtimestamp(ms/1000.0)
     # to convert back into date time
 
-
+# Converts the month abbreviation into a number
 def convert_string_month_to_num(input_mon):
     if input_mon.lower() == "jan":
         return 1

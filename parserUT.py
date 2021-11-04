@@ -58,6 +58,3 @@ def parserI(url, time_frame, first_tweet_time):
     iteration += 1
 
     return cleaned_data
-
-
-
