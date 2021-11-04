@@ -7,23 +7,6 @@ sample_time_date_start = "Sat Nov 16 13:52:20 +0000 2019"
 sample_time_date_end = "Sun Nov 17 04:38:18 +0000 2019"
 
 
-# Think how this could be put into a stream and not read from file
-def list_maker(input):
-    with open(input, encoding='utf8') as in_file:
-        all_lines = in_file.readlines()
-    split_by_chars = ' - b'
-    results = []
-    for line in all_lines:
-        parts = line.split(split_by_chars)
-        parts[0] = convert_time_date_to_unix(parts[0])
-        parts.append(filter_by_sport(parts[1]))
-        results.append(parts)
-    input = []
-    for item in results:
-        input.append(item)
-    return input
-
-
 def counter_for_graph(input_list, time_frame_unix):
     start_unix_time = input_list[0][0]
     end_unix_time = start_unix_time + time_frame_unix
@@ -51,10 +34,10 @@ def counter_for_graph(input_list, time_frame_unix):
     time_frame_index = 0
 
     for tweet in input_list:
-        if tweet[2] == []:
+        if tweet[1] == []:
             continue
         elif tweet[0] <= unix_time_frames[time_frame_index]:
-            for sport in tweet[2]:
+            for sport in tweet[1]:
                 if sport == "baseball":
                     baseball_num += 1
                 elif sport == "basketball":
