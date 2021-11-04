@@ -28,7 +28,7 @@ def filter_by_sport(input):
     # if their were multiple repetitions of a sport in the tweet, they are removed
     # bubble sort needs to be before the removal of dupes
     # since dupes after a unique entry would not be removed
-    return remove_dups(bubble_sort(twt_sport))
+    return remove_dupes(bubble_sort(twt_sport))
 
 
 # uses RegEx to remove all special characters from an input
@@ -37,7 +37,7 @@ def remove_special_chars(input):
 
 
 # removes duplicates in a list
-def remove_dups(data):
+def remove_dupes(data):
     # declares result list
     res = []
 
