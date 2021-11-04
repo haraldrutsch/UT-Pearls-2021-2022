@@ -1,12 +1,11 @@
-import filter_tweet
+import parserUT
 import counter
-from parser import *
+
 #Main is going to be our Program.
 url = "https://bronto.ewi.utwente.nl/ecadata/sports-20191117.txt"
 time_interval = 10*60 #in seconds
-first_tweet
-
+first_time = 1573905101
 new_data = []
-new_data = parser(url, time_interval)
+new_data = parserUT.parserI(url, time_interval, first_time)
 
-cleaned_data
+print(counter.counter_for_graph(new_data,time_interval))
