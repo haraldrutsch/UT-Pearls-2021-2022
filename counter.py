@@ -139,7 +139,7 @@ def dict_convert_string_month_to_num(input_mon):
     }
 
     try:
-        monthNum = month[input_mon]
-        return monthNum
+        month_num = month[input_mon]
+        return month_num
     except:
         return "Error: Month {0} not recognised".format(input_mon)
