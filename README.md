@@ -12,3 +12,4 @@ Project for UT-Pearls Week 9 2021-2022.
 **Libraries**
 - <a href="https://github.com/plotly/plotly.py" target="_blank">Plotly 3.5.1</a>
 - <a href="https://dash.plotly.com/" target="_blank">Dash 2.0.0</a>
+- <a href="https://pandas.pydata.org/" target="_blank">Pandas 1.3.4</a>
