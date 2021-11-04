@@ -95,13 +95,15 @@ def counter_for_graph(input_list, time_frame_unix):
     return all_totals
 
 
+
 def convert_time_date_to_unix(input):
     # Assuming date time comes in form -> Sun Nov 17 04:38:18 +0000 2019
     split_input = re.split(" ", input)
-    date_time_filtered = "{1}/{0}/{2}, {3}".format(covert_string_month_to_num(split_input[1]), split_input[2], split_input[5], split_input[3])
+    date_time_filtered = "{1}/{0}/{2}, {3}".format(convert_string_month_to_num(split_input[1]), split_input[2], split_input[5], split_input[3])
     date_format = datetime.datetime.strptime(date_time_filtered, "%d/%m/%Y, %H:%M:%S")
     unix_time = datetime.datetime.timestamp(date_format)
     return unix_time
+
 
 
 def convert_unix_to_time_date(input):
@@ -111,7 +113,7 @@ def convert_unix_to_time_date(input):
     # to convert back into date time
 
 
-def covert_string_month_to_num(input_mon):
+def convert_string_month_to_num(input_mon):
     if input_mon.lower() == "jan":
         return 1
     elif input_mon.lower() == "feb":
@@ -139,3 +141,4 @@ def covert_string_month_to_num(input_mon):
     else:
         return "Error: Month {0} not recognised".format(input_mon)
 
+print(counter_for_graph(list_maker("output.txt"), 3600))
