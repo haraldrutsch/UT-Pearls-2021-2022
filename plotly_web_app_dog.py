@@ -1,15 +1,14 @@
 import datetime
 
 import dash
-from dash import html
-from dash import dcc
+import dash_core_components as dcc
+import dash_html_components as html
 import plotly
 from dash.dependencies import Input, Output
 from parserUT import *
 import pandas
 import plotly.graph_objects as go
-
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+from counter import *
 
 # Global variables
 line_chart_data = {
@@ -34,73 +33,25 @@ mode_size = [8, 8, 8, 8, 8, 8, 8, 8]
 line_size = [2, 2, 2, 2, 2, 2, 2, 2]
 # Global variables
 
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
-app.layout = html.Div([
-    html.Div(style={
-        'backgroundColor': '#FFFFFF'},
-        children=[
-            html.H1(
-                children='Twente Analytica',
-                style={
-                    'textAlign': 'center',
-                    'color': '#000000'}),
-            html.Div([
-                html.H3(
-                    children='Line Chart',
-                    style={
-                        'textAlign': 'center',
-                        'color': '#000000',
-                        'font': 'Times New Roman'}),
-                dcc.Graph(
-                    id='line_chart_main',
-                    figure=fig,
-                    style={
-                        'height': 500,
-                        'width': 750,
-                        "display": "inline-block",
-                        "margin-top": "auto",
-                        "margin-left": "",
-                        "margin-right": ""
-                    }),
-                dcc.Interval(
-                    id='interval_line_chart_main',
-                    interval=1 * 1000,  # in milliseconds
-                    n_intervals=0
-                ),
-            ], className="seven columns"),
-            '''
-            html.Div([
-                html.H3(
-                    children='Popularity',
-                    style={
-                        'textAlign': 'center',
-                        'color': '#000000'}),
-                dcc.Graph(
-                    id='pie_chart_main',
-                    figure=fig1,
-                    style={
-                        'height': 500,
-                        'width': 600,
-                        "display": "",
-                        "margin-left": "",
-                        "margin-right": ""
-                    }, ),
-                dcc.Interval(
-                    id='interval_pie_chart_main',
-                    interval=1 * 1000,  # in milliseconds
-                    n_intervals=0
-                ),
-            ], className="seven columns"),
-            '''
-        ], className="container")
-])
+app.layout = html.Div(
+    html.Div([
+        html.H4('LiveAnalytics'),
+        dcc.Graph(id='live-update-graph'),
+        dcc.Interval(
+            id='interval-component',
+            interval=5*1000, # in milliseconds
+            n_intervals=0
+        )
+    ])
+)
 
 
 # Multiple components can update everytime interval gets fired.
-@app.callback(Output('line_chart_main', 'figure'),
-              Input('interval_line_chart_main', 'n_intervals'))
+@app.callback(Output('live-update-graph', 'figure'),
+              Input('interval-component', 'n_intervals'))
 def update_graph_live(n):
     global line_chart_data
     global last_time_frame_index
@@ -112,10 +63,10 @@ def update_graph_live(n):
     global line_size
 
     # Collect some data
-    temp = parser(data_url, time_interval, last_time_frame_index)
+    temp = counter_for_graph(parser(data_url, time_interval, last_time_frame_index), time_interval - 1)
     last_time_frame_index += 1
 
-    line_chart_data['time'].append(temp[0][0])
+    line_chart_data['time'].append(convert_unix_to_time_date(temp[0][0]))
     line_chart_data['baseball'].append(temp[1][0])
     line_chart_data['basketball'].append(temp[2][0])
     line_chart_data['volleyball'].append(temp[3][0])
@@ -126,49 +77,68 @@ def update_graph_live(n):
     line_chart_data['rugby'].append(temp[8][0])
 
     # Create the graph with subplots
-    #fig = plotly.tools.make_subplots(rows=1, cols=1, vertical_spacing=0.2)
-    #fig['layout']['margin'] = {
-    #    'l': 30, 'r': 10, 'b': 30, 't': 10
-    #}
-    #fig['layout']['legend'] = {'x': 0, 'y': 1, 'xanchor': 'left'}
+    fig = plotly.tools.make_subplots(rows=1, cols=1, vertical_spacing=0.1)
+    fig['layout']['margin'] = {
+        'l': 30, 'r': 10, 'b': 30, 't': 10
+    }
+    fig['layout']['legend'] = {'x': 0, 'y': 1, 'xanchor': 'left'}
 
-    for n in range(1, 8):
-        fig.append_trace(go.Scatter(x=line_chart_data['time'][last_time_frame_index],
-                                    y=line_chart_data[n][last_time_frame_index],
-                                    mode='lines',
-                                    line=dict(color=colors[n], width=line_size[n]),
-                                    connectgaps=True))
-
-    fig.update_layout(
-        xaxis=dict(
-            showline=True,
-            showgrid=False,
-            showticklabels=True,
-            linecolor='rgb(204, 204, 204)',
-            linewidth=2,
-            ticks='outside',
-            tickfont=dict(
-                family='Arial',
-                size=12,
-                color='rgb(82, 82, 82)',
-            ),
-        ),
-        yaxis=dict(
-            showgrid=False,
-            zeroline=False,
-            showline=True,
-            showticklabels=True,
-            linecolor='rgb(204, 204, 204)',
-            linewidth=2,
-            ticks='outside',
-            tickfont=dict(
-                family='Arial',
-                size=12,
-                color='rgb(82, 82, 82)', )
-
-        ), )
-
-    fig.update_layout(annotations=annotations)
+    fig.append_trace({
+        'x': line_chart_data['time'],
+        'y': line_chart_data['baseball'],
+        'name': 'baseball',
+        'mode': 'lines+markers',
+        'type': 'scatter'
+    }, 1, 1)
+    fig.append_trace({
+        'x': line_chart_data['time'],
+        'y': line_chart_data['basketball'],
+        'name': 'basketball',
+        'mode': 'lines+markers',
+        'type': 'scatter'
+    }, 1, 1)
+    fig.append_trace({
+        'x': line_chart_data['time'],
+        'y': line_chart_data['volleyball'],
+        'name': 'volleyball',
+        'mode': 'lines+markers',
+        'type': 'scatter'
+    }, 1, 1)
+    fig.append_trace({
+        'x': line_chart_data['time'],
+        'y': line_chart_data['tennis'],
+        'name': 'tennis',
+        'mode': 'lines+markers',
+        'type': 'scatter'
+    }, 1, 1)
+    fig.append_trace({
+        'x': line_chart_data['time'],
+        'y': line_chart_data['cricket'],
+        'name': 'cricket',
+        'mode': 'lines+markers',
+        'type': 'scatter'
+    }, 1, 1)
+    fig.append_trace({
+        'x': line_chart_data['time'],
+        'y': line_chart_data['soccer'],
+        'name': 'soccer',
+        'mode': 'lines+markers',
+        'type': 'scatter'
+    }, 1, 1)
+    fig.append_trace({
+        'x': line_chart_data['time'],
+        'y': line_chart_data['football'],
+        'name': 'football',
+        'mode': 'lines+markers',
+        'type': 'scatter'
+    }, 1, 1)
+    fig.append_trace({
+        'x': line_chart_data['time'],
+        'y': line_chart_data['rugby'],
+        'name': 'rugby',
+        'mode': 'lines+markers',
+        'type': 'scatter'
+    }, 1, 1)
 
     return fig
 
