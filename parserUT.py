@@ -17,6 +17,10 @@ def parser(url, time_frame, time_frame_index):
     first_tweet_time = convert_time_date_to_unix(json_aux['created_at'])
     tweet_parse_time = first_tweet_time + (time_frame * time_frame_index)
 
+    # DEBUG CODE - REMOVE LATER
+    # print("First tweet unix: " + str(first_tweet_time) + " | Calculated tweet start time: " + str(tweet_parse_time))
+    # DEBUG CODE - REMOVE LATER
+
     # Calls parser_stage_two for further processing
     return parser_stage_two(url, time_frame, tweet_parse_time)
 
@@ -31,7 +35,9 @@ def parser_stage_two(url, time_frame, first_tweet_time):
     for line in file:
         tweet_aux = json.loads(line)
         # Checks whether the current tweet was created inside the timeframe
-        if convert_time_date_to_unix(tweet_aux['created_at']) <= first_tweet_time + time_frame:
+        if convert_time_date_to_unix(tweet_aux['created_at']) < first_tweet_time:
+            continue
+        elif convert_time_date_to_unix(tweet_aux['created_at']) <= first_tweet_time + time_frame:
             # Tries to fetch the quoted tweet
             # If it doesn't exist, it doesn't
             try:
