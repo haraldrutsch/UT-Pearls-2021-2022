@@ -43,6 +43,4 @@ def parser_stage_two(url, time_frame, first_tweet_time):
         else:
             break
 
-    iteration += 1
-
     return cleaned_data
