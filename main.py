@@ -1,13 +1,12 @@
-from filter_tweet import *
-from counter import *
+import filter_tweet
+import counter
+from parser import *
+#Main is going to be our Program.
+url = "https://bronto.ewi.utwente.nl/ecadata/sports-20191117.txt"
+time_interval = 10*60 #in seconds
+first_tweet
 
-filtered_data = 'output.txt'
+new_data = []
+new_data = parser(url, time_interval)
 
-
-def main():
-    print("")
-    print(counter_for_graph(list_maker(Sat Nov 16 12:51:41 +0000 2019 - b'@BobGreenburg @ONeill_Coffee Congrats to the excellent football program at Wilmington. One classy organization!'), 4 ))
-
-
-if __name__ == '__main__':
-    main()
+cleaned_data
