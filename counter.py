@@ -5,11 +5,12 @@ import datetime
 
 # Counts the number of tweets for all kind of sports
 def counter_for_graph(input_list, time_frame_unix):
-    # Gets te unix time of the first tweet in the input list
+    # Gets the unix time of the first tweet in the input list
     start_unix_time = input_list[0][0]
     # End of the timeframe
     end_unix_time = start_unix_time + time_frame_unix
 
+    # Declaring all the lists that are going to be used
     unix_time_frames = []
     baseball_totals = []
     basketball_totals = []
@@ -20,6 +21,7 @@ def counter_for_graph(input_list, time_frame_unix):
     football_totals = []
     rugby_totals = []
 
+    # Declaring all counting variables that are going to be used
     baseball_num = 0
     basketball_num = 0
     volleyball_num = 0
@@ -34,12 +36,13 @@ def counter_for_graph(input_list, time_frame_unix):
     time_frame_index = 0
 
     # Looks at if a sport is mentioned in a tweet
+    # If it is empty it is skipped
     for tweet in input_list:
         if tweet[1] == []:
             continue
         # Looks whether the tweet is in the timeframe
         elif tweet[0] <= unix_time_frames[time_frame_index]:
-            # Checks for every sport
+            # Checks all the items in the list, for each item the corresponding counter is incremented
             for sport in tweet[1]:
                 if sport == "baseball":
                     baseball_num += 1
@@ -139,7 +142,7 @@ def dict_convert_string_month_to_num(input_mon):
     }
 
     try:
-        monthNum = month[input_mon]
-        return monthNum
+        month_num = month[input_mon]
+        return month_num
     except:
         return "Error: Month {0} not recognised".format(input_mon)
