@@ -42,4 +42,4 @@ def parserI(url, time_frame, first_tweet_time):
     return cleaned_data
 
 
-print(parser("http://library.ewi.utwente.nl/ecadata/sports-20191117.txt",3))
+#print(parser("http://library.ewi.utwente.nl/ecadata/sports-20191117.txt",3))
