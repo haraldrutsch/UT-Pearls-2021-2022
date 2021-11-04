@@ -97,11 +97,10 @@ def convert_time_date_to_unix(input):
     return unix_time
 
 
+# Converts unix time to date time
 def convert_unix_to_time_date(input):
-    print()
-    # TODO: make this func
-    # datetime.datetime.fromtimestamp(ms/1000.0)
-    # to convert back into date time
+    date_time = datetime.datetime.fromtimestamp(input)
+    return date_time.strftime('%d-%m-%Y %H:%M:%S')
 
 
 # Converts the month abbreviation into a number
