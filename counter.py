@@ -140,5 +140,3 @@ def convert_string_month_to_num(input_mon):
         return 12
     else:
         return "Error: Month {0} not recognised".format(input_mon)
-
-print(counter_for_graph(list_maker("output.txt"), 3600))
