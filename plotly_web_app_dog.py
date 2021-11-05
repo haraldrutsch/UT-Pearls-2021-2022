@@ -9,6 +9,7 @@ from parserUT import *
 import pandas
 import plotly.graph_objects as go
 from counter import *
+from multiprocessing.pool import ThreadPool
 
 # Global variables
 line_chart_data = {
@@ -25,7 +26,7 @@ line_chart_data = {
 
 last_time_frame_index = 0
 data_url = "https://bronto.ewi.utwente.nl/ecadata/sports-20191117.txt"
-time_interval = 10 * 60
+time_interval = 60
 labels = ['Baseball', 'Basketball', 'Voleyball', 'Tennis', 'Cricket', 'Soccer', 'Football', 'Rugby']
 colors = ['rgb(67,67,67)', 'rgb(115,115,115)', 'rgb(49,130,189)', 'rgb(189,189,189)', 'rgb(255,192,203)',
           'rgb(255,0,0)', 'rgb(255, 165,0)', 'rgb(0,128,0)']
@@ -42,7 +43,7 @@ app.layout = html.Div(
         dcc.Graph(id='live-update-graph'),
         dcc.Interval(
             id='interval-component',
-            interval=5*1000, # in milliseconds
+            interval=2 * 1000,  # in milliseconds
             n_intervals=0
         )
     ])
@@ -63,7 +64,9 @@ def update_graph_live(n):
     global line_size
 
     # Collect some data
-    temp = counter_for_graph(parser(data_url, time_interval, last_time_frame_index), time_interval - 1)
+    async_result = pool.apply_async(counter_for_graph, (parser(data_url, time_interval, last_time_frame_index), time_interval - 1))
+    #temp = counter_for_graph(parser(data_url, time_interval, last_time_frame_index), time_interval - 1)
+    temp = async_result.get()
     last_time_frame_index += 1
 
     line_chart_data['time'].append(convert_unix_to_time_date(temp[0][0]))
@@ -143,5 +146,13 @@ def update_graph_live(n):
     return fig
 
 
+def store_in_queue(f):
+    def wrapper(*args):
+        thread_queue.put(f(*args))
+
+    return wrapper
+
+
 if __name__ == '__main__':
+    pool = ThreadPool(processes=1)
     app.run_server(debug=True)
