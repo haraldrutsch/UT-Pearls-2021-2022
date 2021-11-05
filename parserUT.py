@@ -9,6 +9,9 @@ def parser(url, time_frame, time_frame_index):
     # Following code gets the "created_at" of the first tweet
     json_file = urllib.request.urlopen(url)
 
+    #with open('C:/Users/titas/Downloads/sports-dataset.txt') as f:
+    #    json_file = json.load(f)
+
     json_aux = ""
     for line in json_file:
         json_aux = json.loads(line)
@@ -28,6 +31,9 @@ def parser(url, time_frame, time_frame_index):
 def parser_stage_two(url, time_frame, first_tweet_time):
     # Gets the .json file from a url
     file = urllib.request.urlopen(url)
+
+    #with open('C:/Users/titas/Downloads/sports-dataset.txt') as f:
+    #    file = json.load(f)
 
     cleaned_data = []
 

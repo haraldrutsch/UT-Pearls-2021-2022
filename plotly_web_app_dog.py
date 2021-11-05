@@ -9,7 +9,8 @@ from parserUT import *
 import pandas
 import plotly.graph_objects as go
 from counter import *
-from multiprocessing.pool import ThreadPool
+import multiprocessing as mp
+import plotly.express as px
 
 # Global variables
 line_chart_data = {
@@ -32,6 +33,8 @@ colors = ['rgb(67,67,67)', 'rgb(115,115,115)', 'rgb(49,130,189)', 'rgb(189,189,1
           'rgb(255,0,0)', 'rgb(255, 165,0)', 'rgb(0,128,0)']
 mode_size = [8, 8, 8, 8, 8, 8, 8, 8]
 line_size = [2, 2, 2, 2, 2, 2, 2, 2]
+data_refresh_delay = 4
+pie_values = []
 # Global variables
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -40,20 +43,59 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.layout = html.Div(
     html.Div([
         html.H4('LiveAnalytics'),
+        html.Div(id='live-update-line-text'),
+        html.Div(id='hacking-update-line'),
         dcc.Graph(id='live-update-graph'),
+        dcc.Graph(id='live-update-pie'),
+        dcc.Input(id="threshold_input", type="number", placeholder="Write threshold percentage here", debounce=True),
+        html.Div(id='threshold-output'),
         dcc.Interval(
             id='interval-component',
-            interval=2 * 1000,  # in milliseconds
+            interval=data_refresh_delay * 1000,  # in milliseconds
             n_intervals=0
         )
     ])
 )
 
 
-# Multiple components can update everytime interval gets fired.
-@app.callback(Output('live-update-graph', 'figure'),
+@app.callback(Output("threshold-output", "children"), Input("threshold_input", "value"))
+def update_threshold(n):
+    global pie_values
+    global labels
+    pie_value_total = sum(pie_values)
+    style = {'padding': '5px', 'fontSize': '16px'}
+
+    sports_passing_threshold = ""
+    x = 0
+
+    if pie_values == []:
+        return [
+            html.Span(('No values in pie chart yet'), style=style),
+        ]
+
+    for label in labels:
+        if pie_values[x]/pie_value_total > n/100:
+            sports_passing_threshold = sports_passing_threshold + ", " + label
+        x += 1
+
+    return [
+        html.Span('Sports that have reached threshold of {1}%: {0}'.format(sports_passing_threshold, n), style=style),
+    ]
+
+
+@app.callback(Output('live-update-line-text', 'children'),
               Input('interval-component', 'n_intervals'))
-def update_graph_live(n):
+def update_debug_text(n):
+    style = {'padding': '5px', 'fontSize': '16px'}
+    return [
+        html.Span('data_refresh_delay: {0}'.format(data_refresh_delay), style=style),
+        html.Span('last_time_frame_index: {0}'.format(last_time_frame_index), style=style),
+        html.Span('pie_values: {0}'.format(pie_values), style=style),
+    ]
+
+
+@app.callback(Output('hacking-update-line', 'children'), Input('interval-component', 'n_intervals'))
+def update_line_chart_back_end(n):
     global line_chart_data
     global last_time_frame_index
     global data_url
@@ -62,11 +104,14 @@ def update_graph_live(n):
     global colors
     global mode_size
     global line_size
+    global data_refresh_delay
+    global pie_values
 
     # Collect some data
-    async_result = pool.apply_async(counter_for_graph, (parser(data_url, time_interval, last_time_frame_index), time_interval - 1))
-    #temp = counter_for_graph(parser(data_url, time_interval, last_time_frame_index), time_interval - 1)
-    temp = async_result.get()
+    #pool = mp.Pool(mp.cpu_count() - 1)
+    #temp = pool.apply(counter_for_graph, (parser(data_url, time_interval, last_time_frame_index), time_interval - 1))
+    #pool.close()
+    temp = counter_for_graph(parser(data_url, time_interval, last_time_frame_index), time_interval - 1)
     last_time_frame_index += 1
 
     line_chart_data['time'].append(convert_unix_to_time_date(temp[0][0]))
@@ -78,6 +123,41 @@ def update_graph_live(n):
     line_chart_data['soccer'].append(temp[6][0])
     line_chart_data['football'].append(temp[7][0])
     line_chart_data['rugby'].append(temp[8][0])
+    pie_values = []
+    pie_values.append(temp[1][0])
+    pie_values.append(temp[2][0])
+    pie_values.append(temp[3][0])
+    pie_values.append(temp[4][0])
+    pie_values.append(temp[5][0])
+    pie_values.append(temp[6][0])
+    pie_values.append(temp[7][0])
+    pie_values.append(temp[8][0])
+
+
+@app.callback(Output('live-update-pie', 'figure'),
+              Input('interval-component', 'n_intervals'))
+def update_pie_live(n):
+    global pie_values
+    global line_chart_data
+    global labels
+
+    fig = plotly.tools.make_subplots(rows=1, cols=1, vertical_spacing=0.1)
+    fig['layout']['margin'] = {
+        'l': 30, 'r': 10, 'b': 30, 't': 10
+    }
+    fig['layout']['legend'] = {'x': 0, 'y': 1, 'xanchor': 'left'}
+    if pie_values == []:
+        fig = px.pie(values=[100, 100], names=['test', 'test1'])
+    else:
+        fig = px.pie(values=pie_values, names=labels)
+    return fig
+
+
+# Multiple components can update everytime interval gets fired.
+@app.callback(Output('live-update-graph', 'figure'),
+              Input('interval-component', 'n_intervals'))
+def update_graph_live(n):
+    global line_chart_data
 
     # Create the graph with subplots
     fig = plotly.tools.make_subplots(rows=1, cols=1, vertical_spacing=0.1)
@@ -147,5 +227,4 @@ def update_graph_live(n):
 
 
 if __name__ == '__main__':
-    pool = ThreadPool(processes=1)
     app.run_server(debug=True)
