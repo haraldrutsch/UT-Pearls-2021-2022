@@ -79,8 +79,5 @@ def bubble_sort(data):
     return res
 
 
-def main():
-    print("incorrect call")
-
 
 
