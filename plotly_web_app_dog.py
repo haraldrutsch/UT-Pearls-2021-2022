@@ -32,7 +32,7 @@ colors = ['rgb(67,67,67)', 'rgb(115,115,115)', 'rgb(49,130,189)', 'rgb(189,189,1
           'rgb(255,0,0)', 'rgb(255, 165,0)', 'rgb(0,128,0)']
 mode_size = [8, 8, 8, 8, 8, 8, 8, 8]
 line_size = [2, 2, 2, 2, 2, 2, 2, 2]
-data_refresh_delay = 3
+data_refresh_delay = 4
 # Global variables
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
