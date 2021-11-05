@@ -61,7 +61,7 @@ def counter_for_graph(input_list, time_frame_unix):
                 elif sport == "rugby":
                     rugby_num += 1
         else:
-            # Adds everything to their lists and resets the variables
+            # Adds everything to their respective lists and resets the variables
             unix_time_frames.append(unix_time_frames[time_frame_index] + time_frame_unix)
             time_frame_index += 1
             baseball_totals.append(baseball_num)
@@ -87,19 +87,23 @@ def counter_for_graph(input_list, time_frame_unix):
     return all_totals
 
 
-def convert_time_date_to_unix(input):
+def convert_time_date_to_unix(input_time_date):
     # Assuming date time comes in form -> Sun Nov 17 04:38:18 +0000 2019
-    split_input = re.split(" ", input)
+    # Splits the input coming in and harvests only relevant data and puts in a specific format
+    split_input = re.split(" ", input_time_date)
     date_time_filtered = "{1}/{0}/{2}, {3}".format(convert_string_month_to_num(split_input[1]), split_input[2],
                                                    split_input[5], split_input[3])
+
+    # coverts from this specific format into unix time
     date_format = datetime.datetime.strptime(date_time_filtered, "%d/%m/%Y, %H:%M:%S")
     unix_time = datetime.datetime.timestamp(date_format)
     return unix_time
 
 
 # Converts unix time to date time
-def convert_unix_to_time_date(input):
-    date_time = datetime.datetime.fromtimestamp(input)
+def convert_unix_to_time_date(input_unix):
+    # Uses pythons built in functions to convert back to time stamp
+    date_time = datetime.datetime.fromtimestamp(input_unix)
     return date_time.strftime('%d-%m-%Y %H:%M:%S')
 
 
@@ -130,18 +134,4 @@ def convert_string_month_to_num(input_mon):
     elif input_mon.lower() == "dec":
         return 12
     else:
-        return "Error: Month {0} not recognised".format(input_mon)
-
-
-# Another way to convert month abbreviation into a number
-def dict_convert_string_month_to_num(input_mon):
-    month = {
-        "jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6, "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11,
-        "dec": 12
-    }
-
-    try:
-        month_num = month[input_mon]
-        return month_num
-    except:
         return "Error: Month {0} not recognised".format(input_mon)
