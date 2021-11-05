@@ -47,6 +47,8 @@ app.layout = html.Div(
         html.Div(id='hacking-update-line'),
         dcc.Graph(id='live-update-graph'),
         dcc.Graph(id='live-update-pie'),
+        dcc.Input(id="threshold_input", type="number", placeholder="Write threshold percentage here", debounce=True),
+        html.Div(id='threshold-output'),
         dcc.Interval(
             id='interval-component',
             interval=data_refresh_delay * 1000,  # in milliseconds
@@ -54,6 +56,31 @@ app.layout = html.Div(
         )
     ])
 )
+
+
+@app.callback(Output("threshold-output", "children"), Input("threshold_input", "value"))
+def update_threshold(n):
+    global pie_values
+    global labels
+    pie_value_total = sum(pie_values)
+    style = {'padding': '5px', 'fontSize': '16px'}
+
+    sports_passing_threshold = ""
+    x = 0
+
+    if pie_values == []:
+        return [
+            html.Span(('No values in pie chart yet'), style=style),
+        ]
+
+    for label in labels:
+        if pie_values[x]/pie_value_total > n/100:
+            sports_passing_threshold = sports_passing_threshold + ", " + label
+        x += 1
+
+    return [
+        html.Span('Sports that have reached threshold of {1}%: {0}'.format(sports_passing_threshold, n), style=style),
+    ]
 
 
 @app.callback(Output('live-update-line-text', 'children'),
