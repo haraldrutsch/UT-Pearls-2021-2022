@@ -146,13 +146,6 @@ def update_graph_live(n):
     return fig
 
 
-def store_in_queue(f):
-    def wrapper(*args):
-        thread_queue.put(f(*args))
-
-    return wrapper
-
-
 if __name__ == '__main__':
     pool = ThreadPool(processes=1)
     app.run_server(debug=True)
