@@ -33,7 +33,7 @@ colors = ['rgb(67,67,67)', 'rgb(115,115,115)', 'rgb(49,130,189)', 'rgb(189,189,1
           'rgb(255,0,0)', 'rgb(255, 165,0)', 'rgb(0,128,0)']
 mode_size = [8, 8, 8, 8, 8, 8, 8, 8]
 line_size = [2, 2, 2, 2, 2, 2, 2, 2]
-data_refresh_delay = 4
+data_refresh_delay = 7
 pie_values = []
 # Global variables
 
@@ -42,13 +42,24 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.layout = html.Div(
     html.Div([
-        html.H4('LiveAnalytics'),
-        html.Div(id='live-update-line-text'),
+        html.H4(children='LiveAnalytics', style = {
+      'textAlign': 'center',
+      'color': '#000000',
+      'font': 'Times New Roman'
+        }),
         html.Div(id='hacking-update-line'),
         dcc.Graph(id='live-update-graph'),
+        dcc.Input(id="threshold_input", type="number", placeholder="Write threshold percentage here", debounce=True, style = {
+      'textAlign': 'center',
+      'color': '#000000',
+      'font': 'Times New Roman'
+        }),
+        html.Div(id='threshold-output', style = {
+      'textAlign': 'center',
+      'color': '#000000',
+      'font': 'Times New Roman'
+        }),
         dcc.Graph(id='live-update-pie'),
-        dcc.Input(id="threshold_input", type="number", placeholder="Write threshold percentage here", debounce=True),
-        html.Div(id='threshold-output'),
         dcc.Interval(
             id='interval-component',
             interval=data_refresh_delay * 1000,  # in milliseconds
@@ -82,16 +93,6 @@ def update_threshold(n):
         html.Span('Sports that have reached threshold of {1}%: {0}'.format(sports_passing_threshold, n), style=style),
     ]
 
-
-@app.callback(Output('live-update-line-text', 'children'),
-              Input('interval-component', 'n_intervals'))
-def update_debug_text(n):
-    style = {'padding': '5px', 'fontSize': '16px'}
-    return [
-        html.Span('data_refresh_delay: {0}'.format(data_refresh_delay), style=style),
-        html.Span('last_time_frame_index: {0}'.format(last_time_frame_index), style=style),
-        html.Span('pie_values: {0}'.format(pie_values), style=style),
-    ]
 
 
 @app.callback(Output('hacking-update-line', 'children'), Input('interval-component', 'n_intervals'))
@@ -227,4 +228,4 @@ def update_graph_live(n):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
